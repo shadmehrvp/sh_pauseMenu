@@ -66,7 +66,7 @@ Config.Keybinds = {
 -- end
 
 
--- Optional integrations. False leaves the resource fully independent.
+-- Optional integrations. False disables the integration.
 Config.Integrations = {
     hudOverlayEvent = false, -- e.g. 'zx_interface:client:overlay'
     weatherResyncEvent = false -- e.g. 'zx_weather:server:requestSync'
@@ -96,23 +96,23 @@ Config.MapColors = {
     {id='orange', label='Orange', hex='#fb923c'},
     {id='gold', label='Gold', hex='#fbbf24'}
 }
--- Sprite IDs and texture names are public GTA/FiveM identifiers.
+-- Public GTA/FiveM sprite IDs, location names and categories.
 -- Only listed coordinate blips are imported. Entity blips are never imported.
 -- Add public = false to keep a sprite out of the explorer.
 Config.MapSprites = {
-    [40]={label='Property',category='Properties',texture='radar_safehouse'},
-    [52]={label='Convenience store',category='Shops',texture='radar_crim_holdups'},
-    [60]={label='Police station',category='Services',texture='radar_police_station'},
-    [61]={label='Hospital',category='Services',texture='radar_hospital'},
-    [71]={label='Barber',category='Shops',texture='radar_barber'},
-    [72]={label='Vehicle workshop',category='Transport',texture='radar_car_mod_shop'},
-    [73]={label='Clothing store',category='Shops',texture='radar_clothes'},
-    [75]={label='Tattoo shop',category='Shops',texture='radar_tattoo'},
-    [108]={label='Bank',category='Services',texture='radar_dollar_sign'},
-    [110]={label='Ammu-Nation',category='Shops',texture='radar_gun_shop'},
+    [40]={label='Property',category='Properties'},
+    [52]={label='Convenience store',category='Shops'},
+    [60]={label='Police station',category='Services'},
+    [61]={label='Hospital',category='Services'},
+    [71]={label='Barber',category='Shops'},
+    [72]={label='Vehicle workshop',category='Transport'},
+    [73]={label='Clothing store',category='Shops'},
+    [75]={label='Tattoo shop',category='Shops'},
+    [108]={label='Bank',category='Services'},
+    [110]={label='Ammu-Nation',category='Shops'},
     [225]={label='Vehicle',category='Transport',public=false},
     [280]={label='Shared location',category='Shared',public=false},
-    [357]={label='Garage',category='Transport',texture='radar_garage'},
+    [357]={label='Garage',category='Transport'},
     [361]={label='Fuel station',category='Transport'},
     [513]={label='Bus stop',category='Transport'}
 }

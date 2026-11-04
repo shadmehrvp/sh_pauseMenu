@@ -1,32 +1,30 @@
 # Verification
 
-Automated verification updated on 2026-11-05:
+Updated: 2026-11-05. Release: 1.0.0.
 
-- All Lua scripts parse under Lua 5.4.
-- Framework adapters, unavailable character data, numeric validation and identifier privacy.
-- NUI startup handshake, focus lifecycle, native settings/map handoff and closing cleanup.
-- Local cloned-ped headshots, cancellation and texture cleanup.
-- Character-owned saved-place persistence and input validation; GPS sharing distance, routing buckets and rate limits.
-- Independent map camera state, native GPS sample handling, invalid controls, switching 2D/3D and camera cleanup using native mocks.
-- Headless Chromium integration: waypoint, route preview, saved places, safe text rendering, 2D/3D UI, zoom, pan, rotation and returning to the menu.
-- RC.3 map redesign: branch cycling, independent place-type visibility, active waypoint controls, Explore/Nearby/Saved filtering and panel bounds at 1720×720, 900×650 and 650×600.
-- Mocked native checks reject entity-attached/unknown/private blips, conceal all entity pools before camera activation and every frame, block street view and enforce camera bounds after repeated zoom/rotate inputs.
+## Automated checks
 
-Live FiveM checks on this server confirmed the RC.3 aerial camera, public location list, selected-place card, waypoint pin and 2D texture loading. The route was unavailable in that session; the subsequent GPS/radar-calculation fix passes native-mock tests but has not yet been rechecked in game. Two-player concealment, custom overlays and full GPS route sampling still need the smoke test below. This is a release candidate, not a fully production-validated release.
+- Lua 5.4 parsing for all resource scripts.
+- Framework selection and profile handling for ESX, QBCore, Qbox, standalone and custom adapters.
+- Numeric validation, identifier privacy, request limits and server-origin event guards.
+- NUI startup, focus lifecycle, native menu handoff, settings and resource-stop cleanup.
+- Local character headshots, cancellation, fallback and texture cleanup.
+- Character-owned saved places, persistence, GPS sharing distance, routing buckets and rate limits.
+- Map camera bounds, entity concealment and exclusion of private/entity-attached blips using native mocks.
+- GPS fallback when normal waypoint points are absent, curved path sampling, preview cleanup and shared-channel opt-out.
+- Browser integration for location filtering, branch cycling, per-type visibility, waypoints, saved places, route preview, zoom, pan, rotation and map/menu closing.
+- Responsive panel bounds at 1720×720, 900×650 and 650×600.
 
-- RC.5 native-mock regression: ordinary waypoint samples unavailable while on foot, deferred preview sampling, curved road samples, destination removal and close cleanup, normal-route preference and shared-channel opt-out.
+## In-game acceptance
 
-RC.5 adds an on-foot native route fallback. The latest user screenshot still showed missing ordinary route samples before this fix. The new fallback has not yet been confirmed in a live FiveM session.
+The server owner confirmed the current version on 2026-11-05. Earlier live checks also covered aerial rendering, public location selection, destination cards, waypoint pins and 2D texture loading. Automated native mocks complement these checks; they do not simulate every FiveM build or third-party resource.
 
-Live smoke test:
+## Checks for your server
 
-1. Start only `sh_pauseMenu` after the framework; run `refresh` when the manifest changes.
-2. Verify NUI callbacks with the requested mixed-case folder name on your server/client build.
-3. Open and close the menu repeatedly; confirm face, balances and HUD restoration.
-4. Open the aerial map; pan, rotate, zoom and recenter. Verify street view is unavailable and repeated zoom cannot reach ground level.
-5. Switch to 2D and verify game tiles line up with the player and waypoint.
-6. Set GPS nearby and far away; check native route points and route preview when available.
-7. Save/delete places, reconnect and confirm character separation.
-8. Check sharing with two players, then restart the resource while a map camera is active.
-
-9. With a second player and vehicle in view, open the map and pan across them. Confirm entities and entity trackers are hidden, including while the camera moves; close/restart and confirm normal world visibility for both players. Check custom name tags, radar replacements and other resource overlays separately.
+1. Start only one pause-menu resource and start your framework first.
+2. Open/close the menu and verify character data, headshots, controls, HUD and camera restoration.
+3. Check 2D/3D map alignment and GPS for nearby and distant destinations, on foot and in a vehicle.
+4. Test saved-place ownership across characters and sharing between two players in the intended routing bucket.
+5. Verify other players, vehicles and tracking blips are concealed in the aerial view, including during camera movement. Check custom name tags and overlays separately.
+6. Restart the resource while the map is open and verify camera, weather, focus and HUD recovery.
+7. If a mission/racing resource reserves the shared native multi-route channel during map use, disable `Config.Map.nativeRouteFallback`.

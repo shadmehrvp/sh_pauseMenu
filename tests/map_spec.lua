@@ -78,7 +78,7 @@ for _,name in ipairs({'RequestStreamedTextureDict','SetStreamedTextureDictAsNoLo
 dofile('config.lua')
 local file=assert(io.open('client/main.lua'));local code=file:read('*a');file:close()
 local start=assert(code:find('-- sh_pauseMenu map engine.',1,true))
-local finish=assert(code:find('-- End independent map module',start,true))
+local finish=assert(code:find('-- End map module',start,true))
 local Map=assert(load(code:sub(start,finish-1)..'\nreturn SHMap'))()
 local function call(name,data)local result,answered;Map.Request(name,data or {},function(v)result=v;answered=true end);assert(answered);return result end
 assert(call('waypoint',{x=1,y=2})==false)

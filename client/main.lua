@@ -74,7 +74,7 @@ return SHPortrait
 end)()
 -- End portrait module
 
--- sh_pauseMenu map engine. Original implementation using public FiveM natives.
+-- sh_pauseMenu map engine. Created and developed by Shadmehr Valipour.
 local SHMap = (function()
     local api, opened, camera, version = {}, false, nil, 0
     local pose, target, markers, route, saved, received = nil, nil, {}, {}, {}, {}
@@ -129,7 +129,7 @@ local SHMap = (function()
                         end
                         local r,g,blue=GetHudColour(GetBlipHudColour(b))
                         list[#list+1]={id='b'..b,sprite=sprite,label=name,category=category,x=p.x,y=p.y,z=ground(p.x,p.y,p.z),
-                            color=('#%02x%02x%02x'):format(r or 255,g or 255,blue or 255),texture=info.texture}
+                            color=('#%02x%02x%02x'):format(r or 255,g or 255,blue or 255)}
                     end
                 end
                 b=GetNextBlipInfoId(sprite)
@@ -277,7 +277,6 @@ local SHMap = (function()
         radarWasHidden=IsRadarHidden()
         DisplayRadar(true)
         markers=scan();readRoute();startCamera();loadTiles(token)
-        RequestStreamedTextureDict('blips',false)
         CreateThread(function()
             local nextUpdate,nextScan,nextWeather=0,GetGameTimer()+5000,0
             while opened and version==token do
@@ -327,7 +326,6 @@ local SHMap = (function()
         if radarWasHidden~=nil then DisplayRadar(not radarWasHidden);radarWasHidden=nil end
         for _,t in ipairs(tiles) do SetStreamedTextureDictAsNoLongerNeeded(('minimap_sea_%d_%d'):format(t.row,t.col)) end
         tiles={}
-        SetStreamedTextureDictAsNoLongerNeeded('blips')
         for id,cb in pairs(callbacks) do callbacks[id]=nil;cb(false) end
     end
     local function serverRequest(name,data,cb)
@@ -377,8 +375,8 @@ local SHMap = (function()
         elseif name=='zoom' then
             if not camera or not valid(d.factor) or d.factor<.2 or d.factor>5 then cb(false);return end
             tour=nil;target.distance=limit(target.distance/d.factor,minimumHeight,6000)
-        elseif name=='fly' or name=='street' or name=='recenter' then
-            if not camera or name=='street' then cb(false);return end
+        elseif name=='fly' or name=='recenter' then
+            if not camera then cb(false);return end
             if name=='recenter' then d=player() elseif not location(d) then cb(false);return end
             tour=nil;target.x,target.y=d.x,d.y
             target.distance=math.max(minimumHeight,Config.Map.height);target.pitch=limit(Config.Map.pitch,-89,maximumPitch)
@@ -398,7 +396,7 @@ local SHMap = (function()
     end)
     return api
 end)()
--- End independent map module
+-- End map module
 
 
 

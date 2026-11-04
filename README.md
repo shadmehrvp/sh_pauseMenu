@@ -2,9 +2,11 @@
 
 A configurable FiveM pause menu with character information, an interactive city map, saved places and quick access to GTA settings.
 
-**Release candidate:** `v1.0.0-rc.5`. See [verification status](TESTING.md) before deploying to a production server.
+**Created and developed by [Shadmehr Valipour](https://github.com/shadmehrvp).**
 
-![SH city explorer interface](docs/map-ui.png)
+**Version:** `1.0.0` · [Download](https://github.com/shadmehrvp/sh_pauseMenu/releases/latest) · [Verification](TESTING.md)
+
+![SH city explorer interface](https://raw.githubusercontent.com/shadmehrvp/sh_pauseMenu/main/docs/map-ui.png)
 
 *UI preview with a neutral test background. FiveM renders the live city scene behind the interface in game.*
 
@@ -14,7 +16,7 @@ A configurable FiveM pause menu with character information, an interactive city 
 - Character name, session/citizen ID, job, cash and bank balance.
 - Native character headshot using a local duplicate; the player's real mask and clothing remain untouched.
 - Aerial game camera with pan, rotation, bounded zoom and recenter controls.
-- 2D map using game textures at runtime; no bundled map engine, road database or sprites from the reference resource.
+- 2D map using textures from the player’s game installation.
 - Public fixed-location server blips, searchable places, waypoint selection, up to five sequential stops and a GPS route preview.
 - Compact SH city explorer: right-side location list, per-type visibility, branch cycling, destination card and teal waypoint pins.
 - Up to 30 saved places per character, stored in server resource KVPs.
@@ -36,8 +38,6 @@ ensure sh_pauseMenu
 For an existing running server, run these in the **server console**:
 
 ```text
-stop teal_pause
-stop zx_pause
 refresh
 ensure sh_pauseMenu
 ```
@@ -102,9 +102,9 @@ The aerial view suppresses all streamed peds, vehicles and objects locally on ev
 
 These are safeguards for this map UI, not a server anti-cheat. Other resources can still draw their own overlays or publish coordinate trackers. Test with a second player and your server's actual HUD/blip resources before production deployment.
 
-The route comes from GTA's GPS natives. When ordinary waypoint samples are missing, `Config.Map.nativeRouteFallback` enables an on-foot native road preview while the map is open. It uses the game's shared multi-route channel and clears its preview when the destination changes, is removed, or the map closes. Set this option to `false` if a mission/racing resource must keep that channel during map use. Availability and completeness depend on the game having calculated and streamed the route. The UI does not invent a street route when native points are unavailable; the waypoint remains usable and the native GTA map is always accessible. Travel times are estimates. Alternative road-routing modes from the visual reference are not included.
+The route comes from GTA's GPS natives. When ordinary waypoint samples are missing, `Config.Map.nativeRouteFallback` enables an on-foot native road preview while the map is open. It uses the game's shared multi-route channel and clears its preview when the destination changes, is removed, or the map closes. Set this option to `false` if a mission/racing resource must keep that channel during map use. Availability and completeness depend on the game having calculated and streamed the route. If game route points are unavailable, the waypoint and native GTA map remain accessible. Travel times are estimates.
 
-2D textures are read from the player's game installation. Custom radar replacements may need different texture names or grid coordinates. The built-in GTA map remains available if a game build cannot supply these textures. Controller-specific navigation is not included in this independent implementation.
+2D textures are read from the player's game installation. Custom radar replacements may need different texture names or grid coordinates. The built-in GTA map remains available if a game build cannot supply these textures. Controller-specific navigation is not included.
 
 ## Development and verification
 
@@ -117,4 +117,6 @@ python tests/run.py
 
 Browser checks require Playwright installed **outside the resource**. Set `NODE_PATH` to that installation's `node_modules`, then run `node tests/browser.cjs`. `BROWSER_PATH` can point to an installed Chromium/Edge executable.
 
-See [TESTING.md](TESTING.md) for what was and was not verified. See [THIRD_PARTY.md](THIRD_PARTY.md) for asset attribution. The independent application code is MIT licensed; third-party assets retain their own terms.
+Run `python tools/package.py` to generate a clean installation ZIP and checksum in `dist/`. Development tests, workflow files and preview images stay in the source repository.
+
+See [TESTING.md](TESTING.md) for verification details. See [THIRD_PARTY.md](THIRD_PARTY.md) for asset attribution. The application code is MIT licensed; third-party assets retain their own terms.

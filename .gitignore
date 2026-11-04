@@ -16,3 +16,7 @@ __pycache__/
 !.env.example
 .DS_Store
 Thumbs.db
+
+# Release artifacts
+dist/
+*.zip.sha256

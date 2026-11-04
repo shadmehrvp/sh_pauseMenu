@@ -2,9 +2,9 @@ fx_version 'cerulean'
 game 'gta5'
 
 name 'sh_pauseMenu'
-author 'SH Scripts'
+author 'Shadmehr Valipour'
 description 'Pause menu with live character data, an interactive city map and native GTA settings'
-version '1.0.0-rc.5'
+version '1.0.0'
 
 ui_page 'html/index.html'
 shared_script 'config.lua'

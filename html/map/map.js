@@ -1,4 +1,4 @@
-// Independent sh_pauseMenu map UI. No code or assets from the reference resource.
+// sh_pauseMenu map interface. Created and developed by Shadmehr Valipour.
 (() => {
   'use strict';
   const el=id=>document.getElementById(id), canvas=el('world'), context=canvas.getContext('2d');
@@ -213,13 +213,13 @@
     }
     if(frame.markers||frame.places||frame.shared||frame.route||waypointChanged||performance.now()-lastSidebar>1000){lastSidebar=performance.now();sidebar();syncGpsButton();}draw();
   }
-  async function mapClick(x,y,street=false){
-    const hit=hitPoints.find(h=>Math.hypot(h.x-x,h.y-y)<20);if(hit&&!street){select(hit.p);return;}
+  async function mapClick(x,y){
+    const hit=hitPoints.find(h=>Math.hypot(h.x-x,h.y-y)<20);if(hit){select(hit.p);return;}
     let point;
     if(state.mode==='3d')point=await request('pick',{u:x/innerWidth,v:y/innerHeight});
     else{const scale=state.flat.span/innerWidth;point={x:state.flat.x+(x-innerWidth/2)*scale,y:state.flat.y-(y-innerHeight/2)*scale};}
     if(!point||!finite(point.x)||!finite(point.y))return;
-    if(!street)setWaypoint(point);
+    setWaypoint(point);
   }
   function flushMove(){
     inputFrame=0;const move=inputMove;inputMove=null;if(move&&state.open)request(move.rotate?'rotate':'pan',{dx:move.dx,dy:move.dy,height:innerHeight});
@@ -235,7 +235,7 @@
     else{if(!inputMove)inputMove={dx:0,dy:0,rotate:drag.rotate};inputMove.dx+=e.clientX-drag.lastX;inputMove.dy+=e.clientY-drag.lastY;if(!inputFrame)inputFrame=requestAnimationFrame(flushMove);}
     drag.lastX=e.clientX;drag.lastY=e.clientY;
   });
-  canvas.addEventListener('pointerup',e=>{if(drag&&!drag.moved)mapClick(e.clientX,e.clientY,drag.rotate&&state.mode==='3d');drag=null;canvas.classList.remove('dragging');});
+  canvas.addEventListener('pointerup',e=>{if(drag&&!drag.moved&&!drag.rotate)mapClick(e.clientX,e.clientY);drag=null;canvas.classList.remove('dragging');});
   canvas.addEventListener('pointercancel',()=>{drag=null;canvas.classList.remove('dragging');});canvas.addEventListener('contextmenu',e=>e.preventDefault());
   canvas.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY<0?1.2:1/1.2);},{passive:false});
   el('mode').onclick=setMode;el('recenter').onclick=recenter;el('clear').onclick=clear;el('zin').onclick=()=>zoom(1.4);el('zout').onclick=()=>zoom(1/1.4);

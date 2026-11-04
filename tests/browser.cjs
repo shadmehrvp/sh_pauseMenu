@@ -80,6 +80,6 @@ const root=path.resolve(__dirname,'../html');
   await map.locator('#back').click();await page.locator('#map-view').waitFor({state:'hidden'});
   await page.keyboard.press('Escape');await page.locator('#pause').waitFor({state:'hidden'});
   assert.deepEqual(errors,[]);
-  console.log('PASS: independent map UI, waypoint, tour, saved places, safe text, 2D/3D, zoom, pan, rotate and close');
+  console.log('PASS: map UI, waypoint, tour, saved places, safe text, 2D/3D, zoom, pan, rotate and close');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

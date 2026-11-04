@@ -19,3 +19,4 @@ jobs:
       - run: node tests/browser.cjs
         env:
           NODE_PATH: ${{ runner.temp }}/sh-pause-tests/node_modules
+      - run: python tools/package.py
