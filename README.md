@@ -6,9 +6,15 @@ A configurable FiveM pause menu with character information, an interactive city 
 
 **Version:** `1.0.0` · [Download](https://github.com/shadmehrvp/sh_pauseMenu/releases/latest) · [Verification](TESTING.md)
 
-![SH city explorer interface](https://raw.githubusercontent.com/shadmehrvp/sh_pauseMenu/main/docs/map-ui.png)
+## Screenshots
 
-*UI preview with a neutral test background. FiveM renders the live city scene behind the interface in game.*
+**Pause menu**
+
+![Pause menu in FiveM](https://raw.githubusercontent.com/shadmehrvp/sh_pauseMenu/main/docs/screenshots/pause-menu.png)
+
+**Live city map**
+
+![Live city map in FiveM](https://raw.githubusercontent.com/shadmehrvp/sh_pauseMenu/main/docs/screenshots/live-map.png)
 
 ## Features
 
