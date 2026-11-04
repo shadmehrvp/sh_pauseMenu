@@ -82,6 +82,7 @@ local SHMap = (function()
     local tour, weather, lastRouteAt = nil, nil, 0
     local routeRevision,lastPublishedRoute=0,-1
     local radarWasHidden
+    local previewDestination
     -- The explorer is a map, never a close-range spectator camera.
     local minimumHeight, maximumPitch = 180.0, -55.0
     local function valid(n) return type(n)=='number' and n==n and math.abs(n)<1000000 end
@@ -140,20 +141,28 @@ local SHMap = (function()
         end
         return list
     end
+    local function releasePreviewRoute()
+        if not previewDestination then return end
+        SetGpsMultiRouteRender(false)
+        ClearGpsMultiRoute()
+        previewDestination=nil
+    end
     local function readRoute()
         routeRevision=routeRevision+1
         local destination=waypoint()
-        if not destination then route={};return end
+        if not destination then releasePreviewRoute();route={};return end
+        if previewDestination and (previewDestination.x-destination.x)^2+(previewDestination.y-destination.y)^2>4 then releasePreviewRoute() end
         local length=GetGpsBlipRouteLength()
         local maximum=length and length>0 and math.min(length,30000) or 16000
         local step=math.max(12,maximum/220)
         local points={}
-        -- An off-road player projection can fail even when the next road node
-        -- has a valid route. Stay in waypoint slot 0; never borrow mission GPS.
-        for _,fromPlayer in ipairs({true,false}) do
+        -- Slot 0 is the player's waypoint. Slot 2 is read only while this map
+        -- owns an on-foot preview route; mission/blip slot 1 is never borrowed.
+        local slots=previewDestination and {0,2} or {0}
+        for _,slot in ipairs(slots) do for _,fromPlayer in ipairs({true,false}) do
             local sampled={}
             for distance=0,maximum,step do
-                local ok,p=GetPosAlongGpsTypeRoute(fromPlayer,distance,0)
+                local ok,p=GetPosAlongGpsTypeRoute(fromPlayer,distance,slot)
                 if not ok or ok==0 or not p or not valid(p.x) or not valid(p.y) or (p.x==0 and p.y==0) then
                     if #sampled>0 or distance>step*3 then break end
                 else
@@ -163,6 +172,15 @@ local SHMap = (function()
                 end
             end
             if #sampled>=2 then points=sampled;break end
+        end;if #points>=2 then break end end
+        if #points<2 and not previewDestination and Config.Map.nativeRouteFallback then
+            -- GTA can omit the normal waypoint path while on foot. Request a
+            -- road-following game route with on-foot calculation enabled, then
+            -- sample it on the next update rather than drawing a straight line.
+            StartGpsMultiRoute(18,true,true)
+            AddPointToGpsMultiRoute(destination.x+0.0,destination.y+0.0,destination.z+0.0)
+            SetGpsMultiRouteRender(true)
+            previewDestination={x=destination.x,y=destination.y}
         end
         if #points>=2 then route=points else route={} end
     end
@@ -293,7 +311,7 @@ local SHMap = (function()
                 if now>=nextUpdate then
                     nextUpdate=now+33
                     local wp=waypoint();local key=wp and ('%.1f:%.1f'):format(wp.x,wp.y) or ''
-                    if key~=waypointKey or (wp and now-lastRouteAt>2000) then waypointKey=key;lastRouteAt=now;readRoute() end
+                    if key~=waypointKey or (wp and now-lastRouteAt>(#route<2 and 250 or 2000)) then waypointKey=key;lastRouteAt=now;readRoute() end
                     local full=now>=nextScan
                     if full then nextScan=now+5000;markers=scan() end
                     emit(snapshot(full))
@@ -305,6 +323,7 @@ local SHMap = (function()
     end
     function api.Stop()
         opened=false;version=version+1;stopCamera()
+        releasePreviewRoute()
         if radarWasHidden~=nil then DisplayRadar(not radarWasHidden);radarWasHidden=nil end
         for _,t in ipairs(tiles) do SetStreamedTextureDictAsNoLongerNeeded(('minimap_sea_%d_%d'):format(t.row,t.col)) end
         tiles={}
@@ -333,8 +352,8 @@ local SHMap = (function()
         if not opened or type(d)~='table' then cb(false);return end
         if name=='placesList' or name=='placesAdd' or name=='placesDelete' then serverRequest(name,d,cb);return end
         if name=='mode' then if d.mode=='2d' then stopCamera() else startCamera() end
-        elseif name=='waypoint' then if not location(d) then cb(false);return end;SetNewWaypoint(d.x+0.0,d.y+0.0);lastRouteAt=0
-        elseif name=='clear' then SetWaypointOff();route={};routeRevision=routeRevision+1;tour=nil
+        elseif name=='waypoint' then if not location(d) then cb(false);return end;releasePreviewRoute();SetNewWaypoint(d.x+0.0,d.y+0.0);lastRouteAt=0
+        elseif name=='clear' then releasePreviewRoute();SetWaypointOff();route={};routeRevision=routeRevision+1;tour=nil
         elseif name=='pick' then
             if not camera or not valid(d.u) or not valid(d.v) or d.u<0 or d.u>1 or d.v<0 or d.v>1 then cb(false);return end
             local forward,right,up=angles(pose);local x,y,z=cameraPosition();local w,h=GetActiveScreenResolution()

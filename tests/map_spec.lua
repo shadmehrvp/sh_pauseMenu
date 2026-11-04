@@ -3,6 +3,12 @@ local clock,wp=10000,nil
 local rendered,focus=false,nil
 local concealed={}
 local radarHidden=true
+local previewActive,previewPoint,previewStarts=false,nil,0
+local nativeWaypointReady=false
+function StartGpsMultiRoute(colour,fromPlayer,onFoot)assert(colour==18 and fromPlayer and onFoot);previewActive=true;previewStarts=previewStarts+1 end
+function AddPointToGpsMultiRoute(x,y,z)previewPoint={x=x,y=y,z=z} end
+function SetGpsMultiRouteRender(active)previewActive=active end
+function ClearGpsMultiRoute()previewActive=false;previewPoint=nil end
 function IsRadarHidden()return radarHidden end
 function DisplayRadar(show)radarHidden=not show end
 local blips={ [100]={sprite=61,kind=4}, [101]={sprite=61,kind=2}, [102]={sprite=480,kind=4}, [103]={sprite=225,kind=4} }
@@ -58,7 +64,13 @@ function GetGamePool(pool)return pool=='CPed' and {11,13} or pool=='CVehicle' an
 function SetEntityLocallyInvisible(entity)concealed[entity]=(concealed[entity] or 0)+1 end
 function HideHudComponentThisFrame()end
 function GetGpsBlipRouteLength()return 400 end
-function GetPosAlongGpsTypeRoute(fromPlayer,d,slot)assert(slot==0,'Only the user waypoint route is sampled');if fromPlayer then return false,nil end;return true,vec(200+d,-900,30)end
+function GetPosAlongGpsTypeRoute(fromPlayer,d,slot)
+ assert(slot~=1,'Never read another resource mission/blip route')
+ if fromPlayer or (slot==0 and not nativeWaypointReady) or (slot==2 and (not previewActive or not previewPoint)) then return false,nil end
+ local destination=slot==0 and wp or previewPoint
+ local fraction=math.min(d/400,1)
+ return true,vec(200+(destination.x-200)*fraction,-900+(destination.y+900)*fraction+100*math.sin(fraction*math.pi),30)
+end
 function SetNewWaypoint(x,y)wp=vec(x,y,30)end
 function SetWaypointOff()wp=nil end
 function HasStreamedTextureDictLoaded()return true end
@@ -83,7 +95,10 @@ assert(call('zoom',{factor=0})==false)
 assert(call('pick',{u=-1,v=.5})==false)
 assert(call('pick',{u=.5,v=.5}).x)
 assert(call('waypoint',{x=600,y=-900}));clock=clock+2100;assert(coroutine.resume(loop))
+assert(previewActive and previewStarts==1,'Request an on-foot native route when ordinary waypoint samples are absent')
+clock=clock+300;assert(coroutine.resume(loop))
 assert(#messages[#messages].message.route>2,'GPS native points are forwarded to the UI')
+assert(messages[#messages].message.route[2].y>-900,'Forward the road curve supplied by GTA rather than a fabricated direct line')
 assert(call('tour',{on=true}));assert(call('pan',{dx=20,dy=30,height=1080}));assert(call('street',{x=100,y=-800})==false,'Street-level scouting is blocked')
 for _=1,15 do assert(call('zoom',{factor=5})) end
 assert(call('rotate',{dx=0,dy=3000}))
@@ -94,7 +109,16 @@ for _,id in ipairs({11,12,13,14})do assert(concealed[id]>100,'Entity suppression
 assert(call('mode',{mode='2d'}));assert(not rendered and removed[1])
 assert(call('mode',{mode='3d'}));assert(#cameras==2 and rendered)
 assert(call('clear'));assert(not wp)
+assert(not previewActive and not previewPoint,'Clearing the waypoint removes the owned native preview')
+assert(call('waypoint',{x=650,y=-1000}));clock=clock+2100;assert(coroutine.resume(loop));assert(previewActive)
 Map.Stop();assert(not rendered and not Map.IsActive() and removed[2] and not focus)
+assert(not previewActive and not previewPoint,'Closing the map cleans up its native preview')
 assert(radarHidden,'Restore the radar setting after leaving the map')
 assert(call('waypoint',{x=1,y=2})==false)
+nativeWaypointReady=true;previewActive=true;previewPoint=vec(999,999,30)
+local starts=previewStarts
+assert(Map.Start().ok);assert(previewStarts==starts,'An available normal route never starts a multi-route preview')
+Map.Stop();assert(previewActive and previewPoint.x==999,'Normal route cleanup leaves another resource multi-route untouched')
+nativeWaypointReady=false;Config.Map.nativeRouteFallback=false
+assert(Map.Start().ok);Map.Stop();assert(previewStarts==starts and previewActive,'Fallback opt-out preserves the shared GPS channel')
 print('PASS: public-place filtering, entity concealment, camera bounds, native GPS, 2D/3D and cleanup')

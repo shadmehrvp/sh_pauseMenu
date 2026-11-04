@@ -2,7 +2,7 @@
 
 A configurable FiveM pause menu with character information, an interactive city map, saved places and quick access to GTA settings.
 
-**Release candidate:** `v1.0.0-rc.4`. See [verification status](TESTING.md) before deploying to a production server.
+**Release candidate:** `v1.0.0-rc.5`. See [verification status](TESTING.md) before deploying to a production server.
 
 ![SH city explorer interface](docs/map-ui.png)
 
@@ -102,7 +102,7 @@ The aerial view suppresses all streamed peds, vehicles and objects locally on ev
 
 These are safeguards for this map UI, not a server anti-cheat. Other resources can still draw their own overlays or publish coordinate trackers. Test with a second player and your server's actual HUD/blip resources before production deployment.
 
-The route comes from GTA's GPS natives. Availability and completeness depend on the game having calculated and streamed the route. The UI does not invent a street route when native points are unavailable; the waypoint remains usable and the native GTA map is always accessible. Travel times are estimates. Alternative road-routing modes from the visual reference are not included.
+The route comes from GTA's GPS natives. When ordinary waypoint samples are missing, `Config.Map.nativeRouteFallback` enables an on-foot native road preview while the map is open. It uses the game's shared multi-route channel and clears its preview when the destination changes, is removed, or the map closes. Set this option to `false` if a mission/racing resource must keep that channel during map use. Availability and completeness depend on the game having calculated and streamed the route. The UI does not invent a street route when native points are unavailable; the waypoint remains usable and the native GTA map is always accessible. Travel times are estimates. Alternative road-routing modes from the visual reference are not included.
 
 2D textures are read from the player's game installation. Custom radar replacements may need different texture names or grid coordinates. The built-in GTA map remains available if a game build cannot supply these textures. Controller-specific navigation is not included in this independent implementation.
 

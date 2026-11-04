@@ -1,6 +1,6 @@
 # Verification
 
-Verified on 2026-11-04:
+Automated verification updated on 2026-11-05:
 
 - All Lua scripts parse under Lua 5.4.
 - Framework adapters, unavailable character data, numeric validation and identifier privacy.
@@ -13,6 +13,10 @@ Verified on 2026-11-04:
 - Mocked native checks reject entity-attached/unknown/private blips, conceal all entity pools before camera activation and every frame, block street view and enforce camera bounds after repeated zoom/rotate inputs.
 
 Live FiveM checks on this server confirmed the RC.3 aerial camera, public location list, selected-place card, waypoint pin and 2D texture loading. The route was unavailable in that session; the subsequent GPS/radar-calculation fix passes native-mock tests but has not yet been rechecked in game. Two-player concealment, custom overlays and full GPS route sampling still need the smoke test below. This is a release candidate, not a fully production-validated release.
+
+- RC.5 native-mock regression: ordinary waypoint samples unavailable while on foot, deferred preview sampling, curved road samples, destination removal and close cleanup, normal-route preference and shared-channel opt-out.
+
+RC.5 adds an on-foot native route fallback. The latest user screenshot still showed missing ordinary route samples before this fix. The new fallback has not yet been confirmed in a live FiveM session.
 
 Live smoke test:
 

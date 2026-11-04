@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0-rc.5 — 2026-11-05
+
+- Request a native road preview with on-foot support when the ordinary waypoint path is unavailable.
+- Sample only the normal waypoint and the map-owned preview; leave mission/blip GPS samples out.
+- Release preview state on destination change, clear, map close and resource stop.
+- Add fallback opt-out for servers reserving the shared multi-route channel and regression checks.
+
 ## 1.0.0-rc.4 — 2026-11-04
 
 - Wait for asynchronous map mode transitions in browser checks, including faster Linux CI environments.

@@ -75,6 +75,9 @@ Config.Integrations = {
 Config.Map = {
     height = 650.0, pitch = -68.0, lod = 1.6,
     clearWeather = true,
+    -- Uses GTA's shared multi-route channel only when waypoint samples are absent.
+    -- Disable if another resource must retain that channel while this map is open.
+    nativeRouteFallback = true,
     maxSprite = 965, maxMarkers = 1200,
     tileGrid = { x = -4140.0, y = 8400.0, size = 4500.0 }
 }

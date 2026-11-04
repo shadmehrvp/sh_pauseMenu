@@ -4,7 +4,7 @@ game 'gta5'
 name 'sh_pauseMenu'
 author 'SH Scripts'
 description 'Pause menu with live character data, an interactive city map and native GTA settings'
-version '1.0.0-rc.4'
+version '1.0.0-rc.5'
 
 ui_page 'html/index.html'
 shared_script 'config.lua'

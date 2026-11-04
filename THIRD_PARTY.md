@@ -22,3 +22,5 @@ Map visibility and blip native references:
 - https://github.com/citizenfx/natives/blob/master/NETWORK/SetEntityLocallyInvisible.md
 - https://github.com/citizenfx/natives/blob/master/HUD/GetBlipInfoIdType.md
 - https://github.com/citizenfx/natives/blob/master/HUD/GetBlipInfoIdEntityIndex.md
+
+- https://github.com/citizenfx/natives/blob/master/HUD/StartGpsMultiRoute.md
