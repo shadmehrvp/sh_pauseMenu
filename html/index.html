@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="normal">
+  <title>SH Pause Menu</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main id="pause" hidden aria-label="Pause menu">
+    <div class="shade" aria-hidden="true"></div>
+    <div class="canvas" id="canvas">
+      <aside class="sidebar">
+        <div class="brand" id="brand">ROLEPLAY</div>
+        <div class="paused" data-i18n="paused">PAUSED</div>
+        <nav class="navigation" aria-label="Menu">
+          <button class="nav-item active" data-page="overview" aria-current="page"><img src="assets/icon-home.svg" alt=""><span data-i18n="overview">Overview</span></button>
+          <button class="nav-item" data-native="map"><img src="assets/icon-map.svg" alt=""><span data-i18n="map">Map</span></button>
+          <button class="nav-item" data-page="settings"><img src="assets/icon-settings.svg" alt=""><span data-i18n="settings">Settings</span></button>
+          <button class="nav-item" data-page="keybinds"><img src="assets/icon-sliders.svg" alt=""><span data-i18n="keybinds">Keybinds</span></button>
+          <button class="nav-item" data-page="server"><img src="assets/icon-info.svg" alt=""><span data-i18n="serverInfo">Server Info</span></button>
+        </nav>
+        <button class="disconnect" data-action="disconnect"><img src="assets/icon-log-out.svg" alt=""><span data-i18n="disconnect">Disconnect</span></button>
+      </aside>
+
+      <section class="main-content">
+        <header class="page-header">
+          <h1 id="page-title">Welcome back, Alex.</h1>
+          <p id="page-subtitle">Everything you need. One place.</p>
+        </header>
+
+        <div class="page" id="page-overview">
+          <div class="overview-grid">
+            <div class="map-preview">
+              <img class="map-art" src="assets/map.webp" alt="Los Santos city map">
+              <button class="map-surface" data-native="map" aria-label="Open the 3D city map"></button>
+              <div class="map-caption"><span class="small-label" data-i18n="mapPreview">LOS SANTOS · CITY MAP</span><span class="location" id="location">Pillbox Hill</span></div>
+              <button class="map-open secondary" data-native="map"><img src="assets/icon-map.svg" alt=""><span data-i18n="openMap">Open map</span></button>
+            </div>
+            <section class="profile" aria-label="Character information">
+              <div class="identity"><div class="portrait"><img id="avatar" src="assets/icon-user.svg" alt="Character portrait"></div><div><h2 id="player-name">—</h2><p><span id="id-label">Session ID</span> <span id="player-id">—</span></p></div></div>
+              <dl class="balances">
+                <div><dt data-i18n="job">Job</dt><dd id="player-job">—</dd></div>
+                <div><dt data-i18n="cash">Cash</dt><dd id="player-cash">—</dd></div>
+                <div><dt data-i18n="bank">Bank</dt><dd id="player-bank">—</dd></div>
+              </dl>
+              <div id="profile-status" class="profile-status" role="status"></div>
+            </section>
+          </div>
+        </div>
+
+        <section class="page" id="page-settings" hidden>
+          <div class="settings-surface">
+            <div class="section-heading"><h2 data-i18n="gameSettings">Game settings</h2><span class="small-label">GTA V / FIVEM</span></div>
+            <div class="settings-row"><div><h3 data-i18n="graphicsAudio">Graphics, audio & controls</h3><p data-i18n="nativeSettingsHint">Adjust the game’s settings in the original menu.</p></div><button class="secondary" data-native="settings"><span data-i18n="openSettings">Open settings</span><img src="assets/icon-external-link.svg" alt=""></button></div>
+            <div class="section-heading preferences-title"><h2 data-i18n="menuPreferences">Menu preferences</h2><span class="saved" id="save-state" role="status"></span></div>
+            <div class="settings-row"><label for="opacity"><h3 data-i18n="opacity">Background darkness</h3><p data-i18n="opacityHint">Keep your menu comfortable to read.</p></label><div class="range-wrap"><input id="opacity" type="range" min="45" max="90" step="1"><output for="opacity" id="opacity-value">64%</output></div></div>
+            <div class="settings-row"><label for="blur"><h3 data-i18n="blur">Background blur</h3><p data-i18n="blurHint">Soften the city behind your menu.</p></label><input class="switch" id="blur" type="checkbox" role="switch"></div>
+            <div class="settings-row"><label for="sound"><h3 data-i18n="sound">Menu sounds</h3><p data-i18n="soundHint">Play a subtle sound when opening and closing.</p></label><input class="switch" id="sound" type="checkbox" role="switch"></div>
+            <div class="settings-row"><label for="reducedMotion"><h3 data-i18n="motion">Reduce motion</h3><p data-i18n="motionHint">Skip menu transitions and animations.</p></label><input class="switch" id="reducedMotion" type="checkbox" role="switch"></div>
+          </div>
+        </section>
+
+        <section class="page" id="page-keybinds" hidden>
+          <div class="section-toolbar"><label class="search"><img src="assets/icon-search.svg" alt=""><input id="key-search" type="search" placeholder="Search controls…" aria-label="Search controls"></label><button class="secondary" data-native="keybinds"><span data-i18n="editKeybinds">Edit game keybinds</span><img src="assets/icon-external-link.svg" alt=""></button></div>
+          <div class="key-table" id="key-table"></div>
+          <p class="help" data-i18n="keysHint">A quick reference for your server. View or change actual bindings in the game’s keybind editor.</p>
+        </section>
+
+        <section class="page" id="page-server" hidden>
+          <div class="server-surface"><span class="small-label" data-i18n="yourCity">YOUR CITY, YOUR STORY</span><h2 id="server-title">ROLEPLAY</h2><p id="server-description"></p><dl class="server-facts"><div><dt data-i18n="playersOnline">Players online</dt><dd id="server-online">—</dd></div><div><dt data-i18n="connection">Your connection</dt><dd id="server-ping">—</dd></div><div><dt data-i18n="currentLocation">Current location</dt><dd id="server-location">—</dd></div></dl><div class="server-actions"><button class="secondary" data-action="rules"><img src="assets/icon-file-text.svg" alt=""><span data-i18n="rules">Server rules</span></button><button class="secondary" data-action="discord"><img src="assets/icon-message-circle.svg" alt=""><span data-i18n="discord">Join Discord</span></button><button class="secondary" data-action="website" id="website-action" hidden><span data-i18n="website">Website</span><img src="assets/icon-external-link.svg" alt=""></button></div></div>
+        </section>
+
+        <footer class="information-strip"><div class="online"><img src="assets/icon-users.svg" alt=""><span><strong id="online-count">— / —</strong> <span data-i18n="online">online</span></span></div><button data-action="rules"><img src="assets/icon-file-text.svg" alt=""><span data-i18n="rules">Server rules</span></button><button data-action="discord"><img src="assets/icon-message-circle.svg" alt=""><span data-i18n="discord">Join Discord</span></button><button class="refresh" data-action="refresh" aria-label="Refresh player data" title="Refresh"><img src="assets/icon-refresh-cw.svg" alt=""></button></footer>
+        <div class="bottom-actions"><span class="session-note" data-i18n="sessionNote">The city keeps moving while you’re here.</span><button class="resume primary" data-action="resume"><span data-i18n="resume">Resume game</span><kbd>ESC</kbd></button></div>
+      </section>
+    </div>
+    <iframe id="map-view" class="map-view" title="City map" src="map/index.html" hidden></iframe>
+
+    <div class="toast" id="toast" role="status" hidden></div>
+    <dialog id="dialog" aria-labelledby="dialog-title"><div class="dialog-header"><h2 id="dialog-title"></h2><button class="icon-button" id="dialog-close" aria-label="Close dialog"><img src="assets/icon-x.svg" alt=""></button></div><div id="dialog-body"></div><div id="dialog-actions"></div></dialog>
+  </main>
+  <button id="preview-reopen" hidden>Open pause menu <kbd>ESC</kbd></button>
+  <span id="preview-label" hidden>DESIGN PREVIEW · SAMPLE DATA</span>
+</body>
+</html>

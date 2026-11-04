@@ -1,0 +1,18 @@
+# FiveM runtime/build state
+cache/
+node_modules/
+package-lock.json
+yarn.lock
+*.log
+*.zip
+*.rpf
+*.rpf.db
+*.sfl
+*.sfl.db
+__pycache__/
+.venv/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db

@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="normal"><title>sh_pauseMenu · Map</title><link rel="stylesheet" href="map.css"><script src="map.js" defer></script></head>
+<body hidden>
+  <canvas id="world" aria-label="City map. Drag to pan, wheel to zoom, click to set a waypoint."></canvas>
+  <header><div class="identity"><button id="back" aria-label="Back to pause menu"><img src="../assets/icon-arrow-left.svg" alt=""></button><span class="brand-mark" aria-hidden="true">SH<span>↗</span></span><div><small id="city"></small><h1 id="zone">Los Santos</h1></div></div>
+    <nav aria-label="Map controls"><button id="mode">2D view</button><button id="recenter"><img src="../assets/icon-user.svg" alt="">Recenter</button><button id="native"><img src="../assets/icon-external-link.svg" alt="">GTA map</button><button id="clear" class="danger" hidden>Clear route</button><span class="zoom-controls"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button></span></nav>
+  </header>
+  <div class="view-badge"><i></i>CITY MAP <span>PUBLIC PLACES</span></div>
+  <aside aria-label="Places"><div class="panel-heading"><div><span class="eyebrow">SH CITY EXPLORER</span><h2>Locations<span>.</span></h2></div><span id="place-count" class="place-count">0</span></div><div class="search"><img src="../assets/icon-search.svg" alt=""><input id="search" placeholder="Search a place or category" aria-label="Search for a place"></div><div class="filters" role="group" aria-label="Filter places"><button data-filter="all" class="active" aria-pressed="true">Explore</button><button data-filter="nearby" aria-pressed="false">Nearby</button><button data-filter="saved" aria-pressed="false">Saved</button></div><div id="locations"></div><div class="panel-bottom"><button id="add-place"><span>＋</span>Save a place<img src="../assets/icon-chevron-right.svg" alt=""></button></div></aside>
+  <section id="card" class="card" hidden aria-label="Selected place"></section>
+  <p id="status" hidden></p>
+  <details class="map-help"><summary>Map controls <span>?</span></summary><footer><span><kbd>Click</kbd> Set waypoint</span><span><kbd>↑ ↓</kbd> Choose a place</span><span><kbd>← →</kbd> Cycle markers</span><span><kbd>Enter</kbd> Start GPS</span><span><kbd>Wheel</kbd> Zoom</span><span><kbd>T</kbd> Hide place type</span><span><kbd>Del</kbd> Clear route</span><span><kbd>Right drag</kbd> Rotate view</span><span><kbd>Esc</kbd> Back to pause</span></footer></details>
+  <dialog id="dialog"><form id="place-form"><h2 id="dialog-title">Save a place</h2><div id="dialog-body"></div><div class="dialog-actions"><button type="button" id="cancel">Cancel</button><button id="save" class="primary" type="submit">Save</button></div></form></dialog>
+</body></html>

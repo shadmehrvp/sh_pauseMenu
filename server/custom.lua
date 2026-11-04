@@ -1,0 +1,16 @@
+-- Custom frameworks (vRP, ox_core, proprietary cores, etc.) connect here.
+-- Set Config.Framework = 'custom' and replace this hook with YOUR core's API.
+-- This file runs on the server only, after bridge.lua and before main.lua.
+-- Never trust name/money/job values supplied by a NUI/client event.
+
+-- SHBridge.Custom = function(source)
+--     local player = exports['your_core']:GetPlayer(source)
+--     if not player then return nil end
+--     return {
+--         name = player.fullName,
+--         characterId = player.characterId,
+--         job = player.jobLabel,
+--         cash = player.cash,
+--         bank = player.bank
+--     }
+-- end
