@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0-rc.4 — 2026-11-04
+
+- Wait for asynchronous map mode transitions in browser checks, including faster Linux CI environments.
+- Retains the RC.3 live map, location controls, waypoint styling and privacy safeguards.
+
 ## 1.0.0-rc.3 — 2026-11-04
 
 - Compact right-side locations with per-type visibility, branch cycling and a separate destination card.

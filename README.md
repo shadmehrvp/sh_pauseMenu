@@ -2,7 +2,7 @@
 
 A configurable FiveM pause menu with character information, an interactive city map, saved places and quick access to GTA settings.
 
-**Release candidate:** `v1.0.0-rc.3`. See [verification status](TESTING.md) before deploying to a production server.
+**Release candidate:** `v1.0.0-rc.4`. See [verification status](TESTING.md) before deploying to a production server.
 
 ![SH city explorer interface](docs/map-ui.png)
 
